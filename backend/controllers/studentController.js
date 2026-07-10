@@ -54,7 +54,7 @@ const updateStudent = async (req, res) => {
         const student = await Student.findOneAndUpdate(
             { id: req.params.id },
             req.body,
-            { new: true }
+            { returnDocument: "after" }
         );
 
 
