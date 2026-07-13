@@ -40,6 +40,12 @@ app.get("/contact", (req, res) => {
 });
 
 
+// Error Handling Middleware
+const errorHandler = require("./middleware/errorHandler");
+
+app.use(errorHandler);
+
+
 // Start Server
 const PORT = 5000;
 

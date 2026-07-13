@@ -1,0 +1,854 @@
+/* ═══════════════════════════════════════════════════════════
+   File:    Student.css
+   Project: CollegeAPI — Student Management System
+   Purpose: Complete stylesheet with advanced CSS features
+            CSS Variables, animations, glassmorphism cards,
+            gradient buttons, responsive design, dark mode
+   ═══════════════════════════════════════════════════════════ */
+
+
+/* ── CSS Custom Properties (Variables) ──────────────────────
+   Change colors here — updates everywhere automatically!     */
+   :root {
+
+    /* Primary Colors */
+    --primary:          #2563eb;
+    --primary-dark:     #1d4ed8;
+    --primary-light:    #eff6ff;
+
+    /* Status Colors */
+    --success:          #16a34a;
+    --success-dark:     #15803d;
+    --warning:          #f59e0b;
+    --warning-dark:     #d97706;
+    --danger:           #dc2626;
+    --danger-dark:      #b91c1c;
+
+    /* Neutral Colors */
+    --text-dark:        #1e293b;
+    --text-medium:      #475569;
+    --text-light:       #94a3b8;
+    --border-color:     #e2e8f0;
+    --bg-page:          #f0f4f8;
+    --bg-card:          #ffffff;
+    --bg-hover-row:     #f1f5ff;
+
+    /* Shadows */
+    --shadow-sm:        0 2px 8px  rgba(0, 0, 0, 0.06);
+    --shadow-md:        0 8px 24px rgba(0, 0, 0, 0.10);
+    --shadow-lg:        0 16px 40px rgba(0, 0, 0, 0.14);
+    --shadow-blue:      0 8px 20px rgba(37, 99, 235, 0.25);
+    --shadow-green:     0 8px 20px rgba(22, 163, 74, 0.25);
+    --shadow-red:       0 8px 20px rgba(220, 38, 38, 0.25);
+    --shadow-amber:     0 8px 20px rgba(245, 158, 11, 0.25);
+
+    /* Border Radius */
+    --radius-sm:        6px;
+    --radius-md:        10px;
+    --radius-lg:        16px;
+    --radius-xl:        24px;
+    --radius-pill:      50px;
+
+    /* Transitions */
+    --transition:       all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast:  all 0.15s ease;
+
+    /* Spacing */
+    --gap-sm:           10px;
+    --gap-md:           20px;
+    --gap-lg:           30px;
+
+}
+
+
+/* ── Global Reset ────────────────────────────────────────────
+   Remove browser default margin, padding, border-box sizing  */
+*,
+*::before,
+*::after {
+    box-sizing:  border-box;
+    margin:      0;
+    padding:     0;
+}
+
+
+/* ── Smooth Scroll ───────────────────────────────────────────
+   Makes anchor links scroll smoothly instead of jumping      */
+html {
+    scroll-behavior: smooth;
+}
+
+
+/* ── Body ────────────────────────────────────────────────────
+   Page background with animated gradient mesh                */
+body {
+    font-family:      "Segoe UI", Arial, Helvetica, sans-serif;
+    background-color: var(--bg-page);
+
+    /* Animated diagonal gradient background */
+    background-image:
+        radial-gradient(ellipse at 20% 20%, rgba(37, 99, 235, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+        linear-gradient(135deg, #eef2f7 0%, #dfe9f3 50%, #e8f0fe 100%);
+
+    background-attachment: fixed;
+    padding:              30px 20px;
+    color:                var(--text-dark);
+    line-height:          1.6;
+    min-height:           100vh;
+}
+
+
+/* ── Fade-in Animation on Page Load ─────────────────────────
+   Entire page fades in smoothly when first loaded            */
+@keyframes fadeInUp {
+    from {
+        opacity:   0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity:   1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes shimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position:  200% center; }
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: var(--shadow-md); }
+    50%       { box-shadow: var(--shadow-lg); }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity:   0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity:   1;
+        transform: translateX(0);
+    }
+}
+
+
+/* ── Main Container ──────────────────────────────────────────
+   Centers content and sets max width for large screens       */
+.container {
+    width:     90%;
+    max-width: 1200px;
+    margin:    0 auto;
+    animation: fadeInUp 0.6s ease both;
+}
+
+
+/* ── Page Main Title (h1) ────────────────────────────────────
+   Animated gradient text heading effect                      */
+h1 {
+    text-align:  center;
+    font-size:   clamp(22px, 4vw, 38px);  /* responsive font size */
+    font-weight: 800;
+    margin-bottom: var(--gap-lg);
+    letter-spacing: -0.5px;
+
+    /* Gradient text effect */
+    background: linear-gradient(135deg, #1f3c88, #2563eb, #6366f1);
+    background-size:             200% auto;
+    -webkit-background-clip:     text;
+    -webkit-text-fill-color:     transparent;
+    background-clip:             text;
+
+    /* Shimmer animation on heading */
+    animation: shimmer 3s linear infinite;
+}
+
+
+/* ── Section Sub-Heading (h2) ────────────────────────────────
+   Left-bordered accent style heading                         */
+h2 {
+    color:         var(--text-dark);
+    font-size:     20px;
+    font-weight:   700;
+    margin-bottom: var(--gap-md);
+    padding-left:  14px;
+
+    /* Left color accent bar */
+    border-left:   4px solid var(--primary);
+
+    /* Fade-in animation */
+    animation: slideInLeft 0.4s ease both;
+}
+
+
+/* ── Card Component ──────────────────────────────────────────
+   Glassmorphism-style white card with hover lift effect      */
+.card {
+    background:    rgba(255, 255, 255, 0.85);
+    padding:       28px;
+    margin-bottom: 28px;
+    border-radius: var(--radius-lg);
+    border:        1px solid rgba(255, 255, 255, 0.6);
+
+    /* Multi-layer shadow for depth */
+    box-shadow:
+        var(--shadow-md),
+        0 1px 0 rgba(255, 255, 255, 0.8) inset;
+
+    /* Smooth hover transition */
+    transition:    var(--transition);
+
+    /* Glassmorphism blur effect */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+
+/* Card hover — lifts up with stronger shadow */
+.card:hover {
+    transform:  translateY(-4px);
+    box-shadow:
+        var(--shadow-lg),
+        0 1px 0 rgba(255, 255, 255, 0.8) inset;
+    border-color: rgba(37, 99, 235, 0.15);
+}
+
+
+/* ── Table Wrapper ───────────────────────────────────────────
+   Prevents table from overflowing card on small screens      */
+.table-wrapper {
+    overflow-x:    auto;
+    border-radius: var(--radius-md);
+    margin-top:    var(--gap-md);
+
+    /* Thin scrollbar on overflow */
+    scrollbar-width:       thin;
+    scrollbar-color:       var(--primary) var(--border-color);
+}
+
+.table-wrapper::-webkit-scrollbar {
+    height: 5px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+    background: var(--border-color);
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+    background:    var(--primary);
+    border-radius: var(--radius-pill);
+}
+
+
+/* ── Table ───────────────────────────────────────────────────
+   Full width table with rounded corners                      */
+table {
+    width:            100%;
+    border-collapse:  separate;
+    border-spacing:   0;
+    border-radius:    var(--radius-md);
+    overflow:         hidden;
+    background:       white;
+}
+
+
+/* ── Table Header Row ────────────────────────────────────────
+   Gradient blue header with white text                       */
+table thead tr {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+}
+
+table th {
+    color:          white;
+    padding:        15px 14px;
+    font-size:      14px;
+    font-weight:    700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    text-align:     center;
+    white-space:    nowrap;
+
+    /* Thin separator between header cells */
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Remove separator on last header cell */
+table th:last-child {
+    border-right: none;
+}
+
+
+/* ── Table Data Cells ────────────────────────────────────────
+   Padded cells with bottom border separator                  */
+table td {
+    padding:       13px 14px;
+    border-bottom: 1px solid var(--border-color);
+    text-align:    center;
+    color:         var(--text-medium);
+    font-size:     14px;
+    vertical-align: middle;
+}
+
+/* Remove border from last row */
+table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* ── Alternating Row Colors ──────────────────────────────────
+   Every even row gets a very light grey background           */
+table tbody tr:nth-child(even) {
+    background: #f8faff;
+}
+
+
+/* ── Row Hover Effect ────────────────────────────────────────
+   Row highlights blue on mouse hover                         */
+table tbody tr {
+    transition: var(--transition-fast);
+}
+
+table tbody tr:hover {
+    background: var(--bg-hover-row);
+    transform:  scale(1.002);  /* very subtle scale on hover */
+}
+
+
+/* ── No Data Message ─────────────────────────────────────────
+   Shown when table has no records to display                 */
+.no-data {
+    text-align:   center;
+    padding:      40px;
+    color:        var(--text-light);
+    font-size:    16px;
+    font-style:   italic;
+}
+
+
+/* ── Buttons — Base Style ────────────────────────────────────
+   All buttons share base style, color overridden per class   */
+button {
+    padding:         10px 20px;
+    border:          none;
+    border-radius:   var(--radius-md);
+    cursor:          pointer;
+    margin:          3px;
+    font-size:       14px;
+    font-weight:     600;
+    letter-spacing:  0.3px;
+    transition:      var(--transition);
+    position:        relative;
+    overflow:        hidden;
+
+    /* Prevent text selection on click */
+    user-select:     none;
+    -webkit-user-select: none;
+}
+
+
+/* Ripple effect on button click using ::after pseudo-element */
+button::after {
+    content:          "";
+    position:         absolute;
+    inset:            0;
+    background:       rgba(255, 255, 255, 0);
+    transition:       var(--transition-fast);
+}
+
+button:active::after {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+
+/* Button hover — lift up + shadow */
+button:hover {
+    transform:  translateY(-2px);
+    opacity:    0.93;
+}
+
+
+/* Button active/pressed — push down */
+button:active {
+    transform: translateY(0px) scale(0.97);
+}
+
+
+/* ── Save Button (Green) ─────────────────────────────────────
+   Used for Add / Update student form submit                  */
+.saveBtn {
+    background: linear-gradient(135deg, var(--success), var(--success-dark));
+    color:      white;
+    box-shadow: var(--shadow-green);
+    min-width:  110px;
+}
+
+.saveBtn:hover {
+    box-shadow: 0 12px 28px rgba(22, 163, 74, 0.4);
+}
+
+
+/* ── Edit Button (Amber) ─────────────────────────────────────
+   Used in each table row to edit that student                */
+.editBtn {
+    background: linear-gradient(135deg, var(--warning), var(--warning-dark));
+    color:      white;
+    box-shadow: var(--shadow-amber);
+}
+
+.editBtn:hover {
+    box-shadow: 0 12px 28px rgba(245, 158, 11, 0.4);
+}
+
+
+/* ── Delete Button (Red) ─────────────────────────────────────
+   Used in each table row to delete that student              */
+.deleteBtn {
+    background: linear-gradient(135deg, var(--danger), var(--danger-dark));
+    color:      white;
+    box-shadow: var(--shadow-red);
+}
+
+.deleteBtn:hover {
+    box-shadow: 0 12px 28px rgba(220, 38, 38, 0.4);
+}
+
+
+/* ── Form Inputs & Select Dropdown ──────────────────────────
+   Styled form controls with focus glow effect               */
+input,
+select {
+    width:         100%;
+    padding:       12px 16px;
+    margin:        10px 0;
+    border:        1.5px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size:     15px;
+    color:         var(--text-dark);
+    background:    #fdfdff;
+    outline:       none;
+    transition:    var(--transition);
+
+    /* Remove default select arrow on some browsers */
+    appearance:         auto;
+    -webkit-appearance: auto;
+}
+
+
+/* Input placeholder text style */
+input::placeholder {
+    color:      var(--text-light);
+    font-style: italic;
+}
+
+
+/* Input on hover — slightly darker border */
+input:hover,
+select:hover {
+    border-color: #94a3b8;
+}
+
+
+/* Input on focus — blue border + glow */
+input:focus,
+select:focus {
+    border-color: var(--primary);
+    background:   white;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.12),
+        0 2px 8px  rgba(37, 99, 235, 0.08);
+}
+
+
+/* ── Form Label ──────────────────────────────────────────────
+   Labels above form fields                                   */
+label {
+    display:     block;
+    font-size:   13px;
+    font-weight: 600;
+    color:       var(--text-medium);
+    margin-top:  10px;
+}
+
+
+/* ── Search Box ──────────────────────────────────────────────
+   Pill-shaped search input with icon space                   */
+.searchBox {
+    width:         min(100%, 340px);
+    padding:       12px 20px;
+    margin:        16px 0;
+    font-size:     15px;
+    border:        1.5px solid var(--border-color);
+    border-radius: var(--radius-pill);
+    background:    white;
+    color:         var(--text-dark);
+    outline:       none;
+    transition:    var(--transition);
+    box-shadow:    var(--shadow-sm);
+}
+
+.searchBox::placeholder {
+    color: var(--text-light);
+}
+
+.searchBox:hover {
+    border-color: #94a3b8;
+    box-shadow:   var(--shadow-md);
+}
+
+.searchBox:focus {
+    border-color: var(--primary);
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.12),
+        var(--shadow-md);
+}
+
+
+/* ── Badge / Status Pill ─────────────────────────────────────
+   Small colored pill for status labels in table              */
+.badge {
+    display:       inline-block;
+    padding:       3px 10px;
+    border-radius: var(--radius-pill);
+    font-size:     12px;
+    font-weight:   600;
+    letter-spacing: 0.3px;
+}
+
+.badge-success { background: #dcfce7; color: #15803d; }
+.badge-danger  { background: #fee2e2; color: #b91c1c; }
+.badge-warning { background: #fef9c3; color: #a16207; }
+.badge-info    { background: #dbeafe; color: #1d4ed8; }
+
+
+/* ── Stats Row ───────────────────────────────────────────────
+   Row of stat cards shown above the table                    */
+.stats-row {
+    display:               grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap:                   var(--gap-sm);
+    margin-bottom:         var(--gap-md);
+}
+
+.stat-card {
+    background:    white;
+    border-radius: var(--radius-md);
+    padding:       16px;
+    text-align:    center;
+    border:        1px solid var(--border-color);
+    box-shadow:    var(--shadow-sm);
+    transition:    var(--transition);
+}
+
+.stat-card:hover {
+    transform:  translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.stat-card .stat-num {
+    font-size:   28px;
+    font-weight: 800;
+    color:       var(--primary);
+    line-height: 1;
+}
+
+.stat-card .stat-label {
+    font-size:   12px;
+    color:       var(--text-light);
+    margin-top:  4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+
+/* ── Loading Spinner ─────────────────────────────────────────
+   Shown while data is loading from API                       */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.spinner {
+    width:         36px;
+    height:        36px;
+    border:        4px solid var(--border-color);
+    border-top:    4px solid var(--primary);
+    border-radius: 50%;
+    animation:     spin 0.8s linear infinite;
+    margin:        30px auto;
+}
+
+
+/* ── Toast-style Alert Messages ─────────────────────────────
+   Success and error banners below form                       */
+.alert {
+    padding:       12px 18px;
+    border-radius: var(--radius-md);
+    font-size:     14px;
+    font-weight:   600;
+    margin-top:    10px;
+    animation:     fadeInUp 0.3s ease;
+}
+
+.alert-success {
+    background: #dcfce7;
+    color:      #15803d;
+    border:     1px solid #bbf7d0;
+}
+
+.alert-error {
+    background: #fee2e2;
+    color:      #b91c1c;
+    border:     1px solid #fecaca;
+}
+
+
+/* ── Empty State ─────────────────────────────────────────────
+   Shown when no students found in search                     */
+.empty-state {
+    text-align: center;
+    padding:    50px 20px;
+    color:      var(--text-light);
+}
+
+.empty-state p {
+    font-size:   16px;
+    margin-top:  12px;
+    font-style:  italic;
+}
+
+
+/* ── Divider Line ────────────────────────────────────────────
+   Horizontal rule to separate sections                       */
+.divider {
+    border:        none;
+    border-top:    1px solid var(--border-color);
+    margin:        20px 0;
+}
+
+
+/* ── Responsive — Tablet (max 900px) ────────────────────────
+   Adjust layout for medium screens                           */
+@media (max-width: 900px) {
+
+    body {
+        padding: 20px 14px;
+    }
+
+    .container {
+        width: 100%;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    table th,
+    table td {
+        padding:   10px 10px;
+        font-size: 13px;
+    }
+
+}
+
+
+/* ── Responsive — Mobile (max 600px) ────────────────────────
+   Full width layout for small phone screens                  */
+@media (max-width: 600px) {
+
+    body {
+        padding: 12px 10px;
+    }
+
+    h1 {
+        font-size:     24px;
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        font-size: 17px;
+    }
+
+    .card {
+        padding:       16px;
+        border-radius: var(--radius-md);
+        margin-bottom: 16px;
+    }
+
+    /* Stack table horizontally on mobile */
+    table {
+        font-size: 13px;
+    }
+
+    table th,
+    table td {
+        padding: 9px 8px;
+    }
+
+    button {
+        padding:   8px 14px;
+        font-size: 13px;
+    }
+
+    .searchBox {
+        width: 100%;
+    }
+
+    .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+/* ── Print Styles ────────────────────────────────────────────
+   Clean printable version when user prints the page         */
+@media print {
+
+    body {
+        background: white;
+        padding:    0;
+    }
+
+    .card {
+        box-shadow: none;
+        border:     1px solid #ddd;
+    }
+
+    button,
+    .searchBox,
+    .no-print {
+        display: none !important;
+    }
+
+    table th {
+        background:   #2563eb !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust:         exact;
+    }
+
+}
+
+
+/* ── Dark Mode (optional — auto detects system preference) ──
+   Automatically switches to dark theme if OS is dark mode   */
+@media (prefers-color-scheme: dark) {
+
+    :root {
+        --bg-page:      #0f172a;
+        --bg-card:      #1e293b;
+        --text-dark:    #f1f5f9;
+        --text-medium:  #94a3b8;
+        --text-light:   #64748b;
+        --border-color: #334155;
+        --bg-hover-row: #1e3a5f;
+    }
+
+    body {
+        background-image:
+            radial-gradient(ellipse at 20% 20%, rgba(37, 99, 235, 0.1) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 80%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+            linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    }
+
+    .card {
+        background:   rgba(30, 41, 59, 0.9);
+        border-color: rgba(51, 65, 85, 0.8);
+    }
+
+    input,
+    select,
+    .searchBox {
+        background:   #1e293b;
+        color:        #f1f5f9;
+        border-color: #334155;
+    }
+
+    table {
+        background: #1e293b;
+    }
+
+    table tbody tr:nth-child(even) {
+        background: #243347;
+    }
+
+    .stat-card {
+        background:   #1e293b;
+        border-color: #334155;
+    }
+
+}
+/* ========================================
+   Dashboard Header
+======================================== */
+
+.appHeader {
+
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 25px;
+
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+
+    color: white;
+
+    border-radius: 15px;
+
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+
+}
+
+.appHeader h1 {
+
+    margin: 0;
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: 1px;
+
+}
+
+.subTitle {
+
+    margin: 10px 0 5px;
+    font-size: 20px;
+    font-weight: 600;
+
+}
+
+.description {
+
+    margin: 0;
+    font-size: 15px;
+    opacity: 0.95;
+
+}
+/* ========================================
+   Empty Table Message
+======================================== */
+
+.noData {
+
+    padding: 40px;
+
+    text-align: center;
+
+    color: #64748b;
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+}
+
+.noData small {
+
+    display: block;
+
+    margin-top: 10px;
+
+    font-size: 14px;
+
+    color: #94a3b8;
+
+}

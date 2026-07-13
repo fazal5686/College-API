@@ -40,3 +40,44 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Pagination Styling */
+
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+
+.pagination button {
+
+  padding: 8px 14px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+
+}
+
+
+.pagination button:hover {
+
+  opacity: 0.8;
+
+}
+
+
+.pagination button:disabled {
+
+  cursor: not-allowed;
+  opacity: 0.8;
+
+}
+
+
+.activePage {
+
+  font-weight: bold;
+
+}

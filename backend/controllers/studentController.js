@@ -5,7 +5,7 @@ const getStudents = async (req, res) => {
 
     try {
 
-        const students = await Student.find();
+        const students = await Student.find().sort({ id: 1 });
 
         res.status(200).json(students);
 
@@ -27,6 +27,15 @@ const createStudent = async (req, res) => {
 
         // Check data coming from Postman
         console.log("Received Data:", req.body);
+        const existingStudent = await Student.findOne({
+            id: req.body.id
+        });
+        
+        if (existingStudent) {
+            return res.status(400).json({
+                message: "Student ID already exists"
+            });
+        }
 
         const student = new Student({
             id: req.body.id,
@@ -51,8 +60,8 @@ const updateStudent = async (req, res) => {
 
     try {
 
-        const student = await Student.findOneAndUpdate(
-            { id: req.params.id },
+        const student = await Student.findByIdAndUpdate(
+            req.params.id,
             req.body,
             { returnDocument: "after" }
         );
@@ -103,10 +112,7 @@ const getStudentById = async (req, res) => {
 
 const deleteStudent = async (req, res) => {
     try {
-        const student = await Student.findOneAndDelete({
-            id: req.params.id
-        });
-
+        const student = await Student.findByIdAndDelete(req.params.id);
         if (!student) {
             return res.status(404).json({
                 message: "Student not found"
