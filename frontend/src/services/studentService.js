@@ -4,8 +4,12 @@ import API_BASE_URL from "../config/api";
 const API_URL = `${API_BASE_URL}/students`;
 
 // Get all students
-export const getStudents = () => {
-    return axios.get(API_URL);
+export const getStudents = (page, limit, search) => {
+
+    return axios.get(
+        `http://localhost:5000/students?page=${page}&limit=${limit}&search=${search}`
+    );
+
 };
 
 // Add student

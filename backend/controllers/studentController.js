@@ -5,20 +5,79 @@ const getStudents = async (req, res) => {
 
     try {
 
-        const students = await Student.find().sort({ id: 1 });
+        const page = Number(req.query.page) || 1;
 
-        res.status(200).json(students);
+        const limit = Number(req.query.limit) || 5;
 
-    } catch (error) {
+        const search = req.query.search || "";
+
+        const skip = (page - 1) * limit;
+
+
+        const query = {
+
+            $or: [
+                {
+                    name: {
+                        $regex: search,
+                        $options: "i"
+                    }
+                },
+                {
+                    gender: {
+                        $regex: search,
+                        $options: "i"
+                    }
+                },
+                {
+                    id: Number(search) || 0
+                }
+            ]
+
+        };
+
+
+        const totalStudents = await Student.countDocuments(query);
+
+
+        const students = await Student.find(query)
+
+            .sort({ id: 1 })
+
+            .skip(skip)
+
+            .limit(limit);
+
+
+
+        res.status(200).json({
+
+            students,
+
+            totalStudents,
+
+            currentPage: page,
+
+            totalPages: Math.ceil(
+                totalStudents / limit
+            )
+
+        });
+
+
+    }
+    catch(error){
 
         res.status(500).json({
-            message: error.message
+
+            message:error.message
+
         });
 
     }
 
 };
-
+    
 
 // POST create new student
 const createStudent = async (req, res) => {

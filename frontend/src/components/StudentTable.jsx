@@ -12,58 +12,47 @@ function StudentTable({ setEditStudent, refresh }) {
     const [search, setSearch] = useState("");
     const [students, setStudents] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const studentsPerPage = 5;
-    const filteredStudents = students.filter((student) => {
-        const text = search.trim().toLowerCase();
-    
-        return (
-            student.id.toString().includes(text) ||
-            (student.name || "").toLowerCase().includes(text) ||
-            (student.gender || "").trim().toLowerCase() === text
-        );
-    });
-    const indexOfLastStudent = currentPage * studentsPerPage;
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalStudents, setTotalStudents] = useState(0);
+    const [studentsPerPage, setStudentsPerPage] = useState(5);
+     
 
-const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
-
-const currentStudents = filteredStudents.slice(
-    indexOfFirstStudent,
-    indexOfLastStudent
-);
-const totalPages = Math.ceil(
-    filteredStudents.length / studentsPerPage
-);
 const pageNumbers = [];
 
 for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
 }
 
-    const loadStudents = () => {
+const loadStudents = () => {
 
+    getStudents(currentPage, studentsPerPage, search)
+        .then((response) => {
 
-        getStudents()
-    .then((response) => {
+            setStudents(response.data.students || []);
+setTotalPages(response.data.totalPages || 1);
+setTotalStudents(response.data.totalStudents || 0);
+        })
+        .catch((error) => {
 
-        setStudents(response.data);
+            console.log(error);
+            toast.error("Unable to load students");
 
-    })
-    .catch((error) => {
+        });
 
-        console.log(error);
-        toast.error("Unable to load students");
+};
 
-    });
+const handlePageSizeChange = (e) => {
 
-    };
+    setStudentsPerPage(Number(e.target.value));
 
+    setCurrentPage(1);
 
+};
+            useEffect(() => {
 
-    useEffect(() => {
+                loadStudents();
 
-        loadStudents();
-    
-    }, [refresh]);
+            }, [refresh, currentPage, search, studentsPerPage]);
 
     const nextPage = () => {
 
@@ -123,7 +112,22 @@ for (let i = 1; i <= totalPages; i++) {
 
         <div className="card">            
             <h2>
-                Student List (Showing: {filteredStudents.length} / Total: {students.length})
+            <p className="recordInfo">
+
+                Showing{" "}
+                {totalStudents === 0
+                    ? 0
+                    : (currentPage - 1) * studentsPerPage + 1
+                }
+                {" - "}
+                {Math.min(
+                    currentPage * studentsPerPage,
+                    totalStudents
+                )}
+                {" of "}
+                {totalStudents}
+
+                </p>
             </h2>
             <input
             type="text"
@@ -136,7 +140,40 @@ for (let i = 1; i <= totalPages; i++) {
             className="searchBox"
              />
 
+                    <div className="pageSize">
 
+                        <label>
+                            Show:
+                        </label>
+
+                        <select
+                            value={studentsPerPage}
+                            onChange={handlePageSizeChange}
+                        >
+
+                            <option value="5">
+                                5
+                            </option>
+
+                            <option value="10">
+                                10
+                            </option>
+
+                            <option value="25">
+                                25
+                            </option>
+
+                            <option value="50">
+                                50
+                            </option>
+
+                        </select>
+
+                        <span>
+                            records
+                        </span>
+
+                    </div>
             <table border="1">
 
 
@@ -162,13 +199,14 @@ for (let i = 1; i <= totalPages; i++) {
 
                 <tbody>
 
-{
-    filteredStudents.length > 0 ? (
 
-        currentStudents.map((student, index) => (
+    {
+        students.length > 0 ? (
+    
+            students.map((student, index) => (
             <tr key={student._id}>
+<td>{(currentPage - 1) * studentsPerPage + index + 1}</td>
 
-<td>{indexOfFirstStudent + index + 1}</td>
 
                 <td>{student.id}</td>
 
