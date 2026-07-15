@@ -22,7 +22,13 @@ const pageNumbers = [];
 for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
 }
+const handleEdit = (student) => {
 
+    console.log(student);
+
+    setEditStudent(student);
+
+};
 const loadStudents = () => {
 
     getStudents(currentPage, studentsPerPage, search)
@@ -289,9 +295,9 @@ const handlePageSizeChange = (e) => {
 
                     <button
                         className="editBtn"
-                        onClick={() => setEditStudent(student)}
+                        onClick={() => handleEdit(student)}
                     >
-                        ✏️ Edit
+                       ✏️ Edit
                     </button>
 
                     <button
@@ -300,7 +306,7 @@ const handlePageSizeChange = (e) => {
                     >
                         🗑 Delete
                     </button>
-
+                    
                 </td>
 
             </tr>
