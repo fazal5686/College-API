@@ -177,42 +177,113 @@ const handlePageSizeChange = (e) => {
             <table border="1">
 
 
-                <thead>
+            <thead>
+    <tr>
+        <th>S.No.</th>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Gender</th>
+        <th>Age</th>
+        <th>Class</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Address</th>
+        <th>Actions</th>
 
-                <tr>
-
-                <th>#</th>
-
-                <th>ID</th>
-
-                <th>Name</th>
-
-                <th>Gender</th>
-
-                <th>Actions</th>
-
-                </tr>
-
-                </thead>
-
+    </tr>
+</thead>
 
 
                 <tbody>
+                    
 
 
     {
         students.length > 0 ? (
     
             students.map((student, index) => (
-            <tr key={student._id}>
-<td>{(currentPage - 1) * studentsPerPage + index + 1}</td>
+                            
+                
+                <tr key={student._id}>
+                    <td>
 
+<span className="serialBadge">
 
-                <td>{student.id}</td>
+{
+(currentPage - 1) * studentsPerPage + index + 1
+}
 
-                <td>{student.name}</td>
+</span>
 
-                <td>{student.gender}</td>
+</td>
+
+<td>
+
+<span className="idBadge">
+    {student.id}
+</span>
+
+</td>
+
+<td>
+
+<strong className="studentName">
+    {student.name}
+</strong>
+
+</td>
+
+                <td>
+
+    <span
+        className={
+            student.gender === "Male"
+                ? "genderMale"
+                : "genderFemale"
+        }
+    >
+        {student.gender}
+    </span>
+
+</td>
+<td>
+
+<span className="ageBadge">
+    {student.age}
+</span>
+
+</td>
+
+<td>
+
+<span className="classBadge">
+    Class {student.class}
+</span>
+
+</td>
+
+<td>
+
+<span className="emailText">
+    {student.email}
+</span>
+
+</td>
+
+<td>
+
+<span className="phoneText">
+    📞 {student.phone}
+</span>
+
+</td>
+<td>
+
+<span className="addressText">
+    {student.address}
+</span>
+
+</td>
 
                 <td>
 
@@ -220,14 +291,14 @@ const handlePageSizeChange = (e) => {
                         className="editBtn"
                         onClick={() => setEditStudent(student)}
                     >
-                        Edit
+                        ✏️ Edit
                     </button>
 
                     <button
                         className="deleteBtn"
                         onClick={() => handleDeleteStudent(student._id)}
                     >
-                        Delete
+                        🗑 Delete
                     </button>
 
                 </td>
@@ -241,7 +312,7 @@ const handlePageSizeChange = (e) => {
         <tr>
 
             <td
-                colSpan="5"
+                colSpan="10"
                 className="noData"
             >
 

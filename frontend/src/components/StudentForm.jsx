@@ -17,8 +17,13 @@ function StudentForm({
         
         id: "",
         name: "",
-        gender: ""
-
+        gender: "",
+        age: "",
+        class: "",
+        email: "",
+        phone: "",
+        address: ""
+    
     });
 
     const idInputRef = useRef(null);
@@ -68,11 +73,7 @@ function StudentForm({
 
         try {
 
-            // Validate Student ID
-if (!student.id) {
-    toast.error("Student ID is required");
-    return;
-}
+           
 
 if (Number(student.id) <= 0) {
     toast.error("Student ID must be greater than 0");
@@ -93,6 +94,31 @@ if (student.name.trim().length < 3) {
 // Validate Gender
 if (!student.gender) {
     toast.error("Please select a gender");
+    return;
+}
+ // Validate Student ID
+ if (!student.age) {
+    toast.error("Age is required");
+    return;
+}
+
+if (!student.class.trim()) {
+    toast.error("Class is required");
+    return;
+}
+
+if (!student.email.trim()) {
+    toast.error("Email is required");
+    return;
+}
+
+if (!student.phone.trim()) {
+    toast.error("Phone is required");
+    return;
+}
+
+if (!student.address.trim()) {
+    toast.error("Address is required");
     return;
 }
 
@@ -130,7 +156,12 @@ if (!student.gender) {
 
                 id: "",
                 name: "",
-                gender: ""
+                gender: "",
+                age: "",
+                class: "",
+                email: "",
+                phone: "",
+                address: ""
             
             });
             
@@ -218,45 +249,68 @@ disabled={editStudent ? true : false}
                         maxLength={50}
                     />
 
+<select
+    name="gender"
+    value={student.gender}
+    onChange={handleChange}
+>
+
+    <option value="">
+        Select Gender
+    </option>
+
+    <option value="Male">
+        Male
+    </option>
+
+    <option value="Female">
+        Female
+    </option>
+
+</select>
+
+<input
+    type="number"
+    name="age"
+    placeholder="Age"
+    value={student.age}
+    onChange={handleChange}
+/>
 
 
-                <select
-
-                    name="gender"
-
-                    value={student.gender}
-
-                    onChange={handleChange}
-
-                >
+<input
+    type="text"
+    name="class"
+    placeholder="Class"
+    value={student.class}
+    onChange={handleChange}
+/>
 
 
-                    <option value="">
-
-                        Select Gender
-
-                    </option>
-
-
-
-                    <option value="Male">
-
-                        Male
-
-                    </option>
+<input
+    type="email"
+    name="email"
+    placeholder="Email"
+    value={student.email}
+    onChange={handleChange}
+/>
 
 
+<input
+    type="text"
+    name="phone"
+    placeholder="Phone"
+    value={student.phone}
+    onChange={handleChange}
+/>
 
-                    <option value="Female">
 
-                        Female
-
-                    </option>
-
-
-
-                </select>
-
+<textarea
+    name="address"
+    placeholder="Address"
+    value={student.address}
+    onChange={handleChange}
+/>
 
 
 

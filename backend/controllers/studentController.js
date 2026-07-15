@@ -10,33 +10,38 @@ const getStudents = async (req, res) => {
         const limit = Number(req.query.limit) || 5;
 
         const search = req.query.search || "";
+        console.log("SEARCH VALUE:", search);
 
         const skip = (page - 1) * limit;
 
 
-        const query = {
 
-            $or: [
-                {
-                    name: {
-                        $regex: search,
-                        $options: "i"
+            const query = {};
+
+            if (search) {
+            
+                query.$or = [
+                    {
+                        name: {
+                            $regex: search,
+                            $options: "i"
+                        }
+                    },
+                    {
+                        gender: {
+                            $regex: search,
+                            $options: "i"
+                        }
                     }
-                },
-                {
-                    gender: {
-                        $regex: search,
-                        $options: "i"
-                    }
-                },
-                {
-                    id: Number(search) || 0
+                ];
+            
+                if (!isNaN(search)) {
+                    query.$or.push({
+                        id: Number(search)
+                    });
                 }
-            ]
-
-        };
-
-
+            
+            }
         const totalStudents = await Student.countDocuments(query);
 
 
@@ -99,9 +104,13 @@ const createStudent = async (req, res) => {
         const student = new Student({
             id: req.body.id,
             name: req.body.name,
-            gender: req.body.gender
+            gender: req.body.gender,
+            age: req.body.age,
+            class: req.body.class,
+            email: req.body.email,
+            phone: req.body.phone,
+            address: req.body.address
         });
-
         const savedStudent = await student.save();
 
         res.status(201).json(savedStudent);

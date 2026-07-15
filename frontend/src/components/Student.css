@@ -388,34 +388,39 @@ button:active {
 }
 
 
-/* ── Edit Button (Amber) ─────────────────────────────────────
-   Used in each table row to edit that student                */
+/* ── Edit Button (Amber) ─────────────────────────────────────*/
+   Used in each table row to edit that student
+
 .editBtn {
     background: linear-gradient(135deg, var(--warning), var(--warning-dark));
-    color:      white;
+    color: white;
     box-shadow: var(--shadow-amber);
 }
 
 .editBtn:hover {
     box-shadow: 0 12px 28px rgba(245, 158, 11, 0.4);
 }
+*/
 
 
-/* ── Delete Button (Red) ─────────────────────────────────────
-   Used in each table row to delete that student              */
+/* ── Delete Button (Red) ─────────────────────────────────────*/
+   Used in each table row to delete that student
+
 .deleteBtn {
     background: linear-gradient(135deg, var(--danger), var(--danger-dark));
-    color:      white;
+    color: white;
     box-shadow: var(--shadow-red);
 }
 
 .deleteBtn:hover {
     box-shadow: 0 12px 28px rgba(220, 38, 38, 0.4);
 }
+*/
 
 
-/* ── Form Inputs & Select Dropdown ──────────────────────────
-   Styled form controls with focus glow effect               */
+/* ── Form Inputs & Select Dropdown ──────────────────────────*/
+   Styled form controls with focus glow effect
+               */
 input,
 select {
     width:         100%;
@@ -777,78 +782,5 @@ label {
         background:   #1e293b;
         border-color: #334155;
     }
-
-}
-/* ========================================
-   Dashboard Header
-======================================== */
-
-.appHeader {
-
-    text-align: center;
-    margin-bottom: 30px;
-    padding: 25px;
-
-    background: linear-gradient(135deg, #2563eb, #1e40af);
-
-    color: white;
-
-    border-radius: 15px;
-
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-
-}
-
-.appHeader h1 {
-
-    margin: 0;
-    font-size: 36px;
-    font-weight: 700;
-    letter-spacing: 1px;
-
-}
-
-.subTitle {
-
-    margin: 10px 0 5px;
-    font-size: 20px;
-    font-weight: 600;
-
-}
-
-.description {
-
-    margin: 0;
-    font-size: 15px;
-    opacity: 0.95;
-
-}
-/* ========================================
-   Empty Table Message
-======================================== */
-
-.noData {
-
-    padding: 40px;
-
-    text-align: center;
-
-    color: #64748b;
-
-    font-size: 18px;
-
-    font-weight: 600;
-
-}
-
-.noData small {
-
-    display: block;
-
-    margin-top: 10px;
-
-    font-size: 14px;
-
-    color: #94a3b8;
 
 }
