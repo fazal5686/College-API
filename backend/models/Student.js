@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
-const studentSchema = new mongoose.Schema({
+const studentSchema = new mongoose.Schema(
+{
     id: {
         type: Number,
         required: true,
@@ -16,6 +17,7 @@ const studentSchema = new mongoose.Schema({
     gender: {
         type: String,
         required: true,
+        enum: ["Male", "Female"],
     },
 
     age: {
@@ -32,13 +34,18 @@ const studentSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
+        unique: true,
+        lowercase: true,
         trim: true,
+        match: /^\S+@\S+\.\S+$/,
     },
 
     phone: {
         type: String,
         required: true,
         trim: true,
+        minlength: 11,
+        maxlength: 11,
     },
 
     address: {
@@ -46,6 +53,10 @@ const studentSchema = new mongoose.Schema({
         required: true,
         trim: true,
     },
-});
+},
+{
+    timestamps: true
+}
+);
 
 module.exports = mongoose.model("Student", studentSchema);

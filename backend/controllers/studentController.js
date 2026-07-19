@@ -1,61 +1,72 @@
-
 const Student = require("../models/Student");
+const asyncHandler = require("../utils/asyncHandler");
+
+
 // GET all students
-const getStudents = async (req, res) => {
+const getStudents = asyncHandler(async (req, res) => {
 
-    try {
+    const page = Number(req.query.page) || 1;
 
-        const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 5;
 
-        const limit = Number(req.query.limit) || 5;
+    const search = req.query.search || "";
 
-        const search = req.query.search || "";
-        console.log("SEARCH VALUE:", search);
+    console.log("SEARCH VALUE:", search);
 
-        const skip = (page - 1) * limit;
-
+    const skip = (page - 1) * limit;
 
 
-            const query = {};
+    const query = {};
 
-            if (search) {
-            
-                query.$or = [
-                    {
-                        name: {
-                            $regex: search,
-                            $options: "i"
-                        }
-                    },
-                    {
-                        gender: {
-                            $regex: search,
-                            $options: "i"
-                        }
-                    }
-                ];
-            
-                if (!isNaN(search)) {
-                    query.$or.push({
-                        id: Number(search)
-                    });
+    if (search) {
+
+        query.$or = [
+
+            {
+                name: {
+                    $regex: search,
+                    $options: "i"
                 }
-            
+            },
+
+            {
+                gender: {
+                    $regex: `^${search}$`,
+                    $options: "i"
+                }
             }
-        const totalStudents = await Student.countDocuments(query);
+
+        ];
 
 
-        const students = await Student.find(query)
+        if (!isNaN(search)) {
 
-            .sort({ id: 1 })
+            query.$or.push({
+                id: Number(search)
+            });
 
-            .skip(skip)
+        }
 
-            .limit(limit);
+    }
+
+
+    const totalStudents = await Student.countDocuments(query);
+
+
+    const students = await Student.find(query)
+        .sort({ id: 1 })
+        .skip(skip)
+        .limit(limit);
 
 
 
-        res.status(200).json({
+    res.status(200).json({
+
+        success: true,
+
+        message: "Students fetched successfully",
+
+        data: {
 
             students,
 
@@ -63,146 +74,177 @@ const getStudents = async (req, res) => {
 
             currentPage: page,
 
-            totalPages: Math.ceil(
-                totalStudents / limit
-            )
+            totalPages: Math.ceil(totalStudents / limit)
 
-        });
+        }
+
+    });
+
+});
 
 
-    }
-    catch(error){
-
-        res.status(500).json({
-
-            message:error.message
-
-        });
-
-    }
-
-};
-    
 
 // POST create new student
-const createStudent = async (req, res) => {
+const createStudent = asyncHandler(async (req, res) => {
 
-    try {
 
-        // Check data coming from Postman
-        console.log("Received Data:", req.body);
-        const existingStudent = await Student.findOne({
-            id: req.body.id
-        });
-        
-        if (existingStudent) {
-            return res.status(400).json({
-                message: "Student ID already exists"
-            });
-        }
+    const existingStudent = await Student.findOne({
+        id: req.body.id
+    });
 
-        const student = new Student({
-            id: req.body.id,
-            name: req.body.name,
-            gender: req.body.gender,
-            age: req.body.age,
-            class: req.body.class,
-            email: req.body.email,
-            phone: req.body.phone,
-            address: req.body.address
-        });
-        const savedStudent = await student.save();
 
-        res.status(201).json(savedStudent);
+    if (existingStudent) {
 
-    } catch (error) {
+        return res.status(400).json({
 
-        res.status(400).json({
-            message: error.message
+            success:false,
+
+            message:"Student ID already exists"
+
         });
 
     }
 
-};// UPDATE student
-const updateStudent = async (req, res) => {
 
-    try {
+    const student = new Student({
 
-        const student = await Student.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            { returnDocument: "after" }
-        );
+        id: req.body.id,
+        name: req.body.name,
+        gender: req.body.gender,
+        age: req.body.age,
+        class: req.body.class,
+        email: req.body.email,
+        phone: req.body.phone,
+        address: req.body.address
+
+    });
 
 
-        if (!student) {
+    const savedStudent = await student.save();
 
-            return res.status(404).json({
-                message: "Student not found"
-            });
 
+    res.status(201).json({
+
+        success:true,
+
+        message:"Student created successfully",
+
+        data:savedStudent
+
+    });
+
+
+});
+
+
+
+// UPDATE student
+const updateStudent = asyncHandler(async (req, res) => {
+
+    const student = await Student.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        {
+            new: true
         }
+    );
 
+    if (!student) {
 
-        res.json(student);
-
-
-    } catch (error) {
-
-        res.status(400).json({
-            message: error.message
+        return res.status(404).json({
+            success: false,
+            message: "Student not found"
         });
 
     }
 
-};
 
-const getStudentById = async (req, res) => {
-    try {
-        const student = await Student.findOne({
-            id: req.params.id
+    res.status(200).json({
+        success: true,
+        message: "Student updated successfully",
+        data: student
+    });
+
+});
+
+
+
+
+
+
+// GET student by ID
+const getStudentById = asyncHandler(async (req, res) => {
+
+
+    const student = await Student.findOne({
+
+        id:Number(req.params.id)
+
+    });
+
+
+    if (!student) {
+
+        return res.status(404).json({
+
+            success:false,
+
+            message:"Student not found"
+
         });
 
-        if (!student) {
-            return res.status(404).json({
-                message: "Student not found"
-            });
-        }
+    }
 
-        res.json(student);
 
-    } catch (error) {
-        res.status(500).json({
-            message: error.message
+    res.status(200).json({
+
+        success:true,
+
+        message:"Student found",
+
+        data:student
+
+    });
+
+
+});
+
+
+
+// DELETE student
+const deleteStudent = asyncHandler(async (req, res) => {
+
+    const student = await Student.findByIdAndDelete(
+        req.params.id
+    );
+
+    if (!student) {
+        return res.status(404).json({
+            success: false,
+            message: "Student not found"
         });
     }
-};
 
-const deleteStudent = async (req, res) => {
-    try {
-        const student = await Student.findByIdAndDelete(req.params.id);
-        if (!student) {
-            return res.status(404).json({
-                message: "Student not found"
-            });
-        }
+    res.status(200).json({
+        success: true,
+        message: "Student deleted successfully",
+        data: student
+    });
 
-        res.json({
-            message: "Student deleted successfully",
-            student
-        });
+});
 
-    } catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
-    }
-};
+
 
 module.exports = {
+
     getStudents,
+
     getStudentById,
+
     createStudent,
+
     updateStudent,
+
     deleteStudent
+
 };

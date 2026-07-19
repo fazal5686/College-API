@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./db");
@@ -16,11 +18,13 @@ app.use(express.json());
 
 // Import Student Routes
 const studentRoutes = require("./routes/studentRoutes");
-
+// Import Auth Routes
+const authRoutes = require("./routes/authRoutes");
 
 // Student API Route
 app.use("/students", studentRoutes);
-
+// Auth API Route
+app.use("/auth", authRoutes);
 
 // Home Route
 app.get("/", (req, res) => {
@@ -47,7 +51,7 @@ app.use(errorHandler);
 
 
 // Start Server
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
