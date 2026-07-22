@@ -3,6 +3,7 @@ const {
     studentValidationRules,
     validateStudent
 } = require("../validators/studentValidator");
+const upload = require("../middleware/uploadMiddleware");
 
 const router = express.Router();
 const protect = require("../middleware/authMiddleware");
@@ -23,6 +24,7 @@ router.get("/:id", getStudentById);
 router.post(
     "/",
     authorize("admin"),
+    upload.single("photo"),
     studentValidationRules,
     validateStudent,
     createStudent

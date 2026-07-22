@@ -1,28 +1,43 @@
-import axios from "axios";
-import API_BASE_URL from "../config/api";
+import API from "../api/axios";
 
-const API_URL = `${API_BASE_URL}/students`;
 
-// Get all students
+// Get students with pagination and search
 export const getStudents = (page, limit, search) => {
 
-    return axios.get(
-        `http://localhost:5000/students?page=${page}&limit=${limit}&search=${search}`
+    return API.get(
+        `/students?page=${page}&limit=${limit}&search=${search}`
     );
 
 };
 
+
 // Add student
 export const addStudent = (student) => {
-    return axios.post(API_URL, student);
+
+    return API.post(
+        "/students",
+        student
+    );
+
 };
+
 
 // Update student
 export const updateStudent = (id, student) => {
-    return axios.put(`${API_URL}/${id}`, student);
+
+    return API.put(
+        `/students/${id}`,
+        student
+    );
+
 };
+
 
 // Delete student
 export const deleteStudent = (id) => {
-    return axios.delete(`${API_URL}/${id}`);
+
+    return API.delete(
+        `/students/${id}`
+    );
+
 };

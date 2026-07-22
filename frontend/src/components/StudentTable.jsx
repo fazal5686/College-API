@@ -34,13 +34,29 @@ const loadStudents = () => {
     getStudents(currentPage, studentsPerPage, search)
         .then((response) => {
 
-            setStudents(response.data.students || []);
-setTotalPages(response.data.totalPages || 1);
-setTotalStudents(response.data.totalStudents || 0);
+            console.log("API RESPONSE:", response.data);
+
+
+            setStudents(
+                response.data.data.students || []
+            );
+
+
+            setTotalPages(
+                response.data.data.totalPages || 1
+            );
+
+
+            setTotalStudents(
+                response.data.data.totalStudents || 0
+            );
+
+
         })
         .catch((error) => {
 
             console.log(error);
+
             toast.error("Unable to load students");
 
         });
@@ -187,6 +203,7 @@ const handlePageSizeChange = (e) => {
     <tr>
         <th>S.No.</th>
         <th>ID</th>
+        <th>Photo</th>
         <th>Name</th>
         <th>Gender</th>
         <th>Age</th>
@@ -224,40 +241,28 @@ const handlePageSizeChange = (e) => {
 </td>
 
 <td>
-
-<span className="idBadge">
-    {student.id}
-</span>
-
-</td>
-
-<td>
-
-<strong className="studentName">
-    {student.name}
-</strong>
-
-</td>
-
-                <td>
-
-    <span
-        className={
-            student.gender === "Male"
-                ? "genderMale"
-                : "genderFemale"
-        }
-    >
-        {student.gender}
+    <span className="idBadge">
+        {student.id}
     </span>
-
 </td>
+
 <td>
+    <img
+        src={`http://localhost:5000/${student.photo.replace(/\\/g, "/")}`}
+        alt={student.name}
+        width="60"
+        height="60"
+        style={{
+            borderRadius: "50%",
+            objectFit: "cover"
+        }}
+    />
+</td>
 
-<span className="ageBadge">
-    {student.age}
-</span>
-
+<td>
+    <strong className="studentName">
+        {student.name}
+    </strong>
 </td>
 
 <td>
@@ -318,7 +323,7 @@ const handlePageSizeChange = (e) => {
         <tr>
 
             <td
-                colSpan="10"
+                colSpan="11"
                 className="noData"
             >
 

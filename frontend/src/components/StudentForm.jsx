@@ -180,16 +180,21 @@ if (!student.address.trim()) {
 
         catch (error) {
 
-
             console.log(error);
-
-            toast.error(
-                error.response?.data?.message || "Operation Failed"
-            );
-
-
+        
+            if (error.response?.data?.errors) {
+        
+                toast.error(error.response.data.errors[0].msg);
+        
+            } else {
+        
+                toast.error(
+                    error.response?.data?.message || "Operation Failed"
+                );
+        
+            }
+        
         }
-
 
     };
 

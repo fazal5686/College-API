@@ -53,6 +53,10 @@ const studentSchema = new mongoose.Schema(
         required: true,
         trim: true,
     },
+    photo: {
+        type: String,
+        default: ""
+    }
 },
 {
     timestamps: true

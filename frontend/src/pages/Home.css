@@ -1,0 +1,309 @@
+body {
+
+    margin: 0;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    background: #f4f7fc;
+
+}
+
+
+/* Main container */
+
+.home {
+
+    min-height: 100vh;
+
+}
+
+
+
+/* Hero Section */
+
+.hero {
+
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+
+    color: white;
+
+    text-align: center;
+
+    padding: 90px 20px;
+
+}
+
+
+.hero h1 {
+
+    font-size: 55px;
+
+    margin-bottom: 15px;
+
+}
+
+
+.hero h2 {
+
+    font-size: 30px;
+
+    font-weight: normal;
+
+}
+
+
+.hero p {
+
+    max-width: 750px;
+
+    margin: 25px auto;
+
+    font-size: 18px;
+
+    line-height: 1.8;
+
+}
+
+
+
+.login-btn {
+
+    margin-top: 25px;
+
+    padding: 14px 35px;
+
+    font-size: 18px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    background: white;
+
+    color: #2563eb;
+
+    font-weight: bold;
+
+    transition: .3s;
+
+}
+
+
+
+.login-btn:hover {
+
+    transform: scale(1.05);
+
+}
+
+
+
+
+
+/* About Section */
+
+.about {
+
+    text-align: center;
+
+    padding: 60px 20px;
+
+    background: white;
+
+}
+
+
+
+.about h2 {
+
+    color: #1e40af;
+
+    font-size: 32px;
+
+}
+
+
+.about p {
+
+    max-width: 850px;
+
+    margin: auto;
+
+    line-height: 1.8;
+
+    font-size: 18px;
+
+    color: #555;
+
+}
+
+
+
+
+
+/* Features Section */
+
+
+.features {
+
+    padding: 60px 20px;
+
+    text-align: center;
+
+}
+
+
+.section-title {
+
+    font-size: 34px;
+
+    color: #1e40af;
+
+    margin-bottom: 40px;
+
+}
+
+
+
+.feature-container {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 30px;
+
+    flex-wrap: wrap;
+
+}
+
+
+
+.feature-card {
+
+    width: 300px;
+
+    background: white;
+
+    padding: 30px;
+
+    border-radius: 15px;
+
+    box-shadow: 0 8px 20px rgba(0,0,0,.12);
+
+    transition: .3s;
+
+}
+
+
+
+.feature-card:hover {
+
+    transform: translateY(-10px);
+
+}
+
+
+
+.feature-card h3 {
+
+    color: #2563eb;
+
+}
+
+
+
+.feature-card p {
+
+    color: #555;
+
+    line-height: 1.6;
+
+}
+
+
+
+
+
+/* Contact Section */
+
+
+.contact {
+
+    background: #e8efff;
+
+    text-align: center;
+
+    padding: 50px 20px;
+
+}
+
+
+
+.contact h2 {
+
+    color: #1e40af;
+
+}
+
+
+
+
+
+/* Footer */
+
+
+.footer {
+
+    background: #111827;
+
+    color: white;
+
+    text-align: center;
+
+    padding: 25px;
+
+}
+
+
+
+.footer p {
+
+    margin: 8px;
+
+}
+
+
+
+
+
+/* Mobile Responsive */
+
+
+@media(max-width:768px){
+
+
+    .hero h1 {
+
+        font-size: 40px;
+
+    }
+
+
+    .hero h2 {
+
+        font-size: 24px;
+
+    }
+
+
+    .feature-card {
+
+        width: 90%;
+
+    }
+
+
+}

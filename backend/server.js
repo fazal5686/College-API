@@ -14,6 +14,7 @@ connectDB();
 // Middleware
 // This allows Express to read JSON data from Postman
 app.use(express.json());
+app.use("/uploads", express.static("uploads"));
 
 
 // Import Student Routes
@@ -22,9 +23,9 @@ const studentRoutes = require("./routes/studentRoutes");
 const authRoutes = require("./routes/authRoutes");
 
 // Student API Route
-app.use("/students", studentRoutes);
+app.use("/api/students", studentRoutes);
 // Auth API Route
-app.use("/auth", authRoutes);
+app.use("/api/auth", authRoutes);
 
 // Home Route
 app.get("/", (req, res) => {
@@ -51,7 +52,7 @@ app.use(errorHandler);
 
 
 // Start Server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

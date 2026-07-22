@@ -1,45 +1,40 @@
-import "./components/Student.css";
-import { useState } from "react";
+import { Routes, Route } from "react-router-dom";
 
-import StudentTable from "./components/StudentTable";
-import StudentForm from "./components/StudentForm";
-
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import AddStudent from "./pages/AddStudent";
+import EditStudent from "./pages/EditStudent";
 function App() {
-
-    const [editStudent, setEditStudent] = useState(null);
-
-    // Refresh flag
-    const [refresh, setRefresh] = useState(false);
 
     return (
 
-        <div className="container">
+        <Routes>
 
-                    <div>
+            <Route
+                path="/"
+                element={<Home />}
+            />
 
-                    <h1>
-                        CollegeAPI Student Management System
-                    </h1>
+            <Route
+                path="/login"
+                element={<Login />}
+            />
 
-                    <p>
-                        React Frontend Connected With MongoDB
-                    </p>
+            <Route
+                path="/dashboard"
+                element={<Dashboard />}
+            />
+<Route
+    path="/edit-student/:id"
+    element={<EditStudent />}
+/>
+            <Route
+                path="/add-student"
+                element={<AddStudent />}
+            />
 
-                    <StudentForm
-                        editStudent={editStudent}
-                        setEditStudent={setEditStudent}
-                        refresh={refresh}
-                        setRefresh={setRefresh}
-                    />
-
-                    <StudentTable
-                        setEditStudent={setEditStudent}
-                        refresh={refresh}
-                    />
-
-                    </div>
-
-        </div>
+        </Routes>
 
     );
 
