@@ -5,9 +5,17 @@ import "./Dashboard.css";
 import { useNavigate } from "react-router-dom";
 function Dashboard() {
     const navigate = useNavigate();
-    const [students, setStudents] = useState([]);
-    const [selectedImage, setSelectedImage] = useState(null);
 
+const [students, setStudents] = useState([]);
+const [search, setSearch] = useState("");
+const [selectedImage, setSelectedImage] = useState(null);
+
+const [currentPage, setCurrentPage] = useState(1);
+const [totalPages, setTotalPages] = useState(1);
+const [totalStudents, setTotalStudents] = useState(0);
+const [activeStudents, setActiveStudents] = useState(0);
+
+const [limit, setLimit] = useState(5);
     const handleLogout = () => {
 
         localStorage.removeItem("token");
@@ -69,31 +77,45 @@ function Dashboard() {
             try {
 
                 const token = localStorage.getItem("token");
-
-                const response = await API.get("/students", {
-                    headers: {
-                        Authorization: `Bearer ${token}`
+            
+                const response = await API.get(
+                    `/students?page=${currentPage}&limit=${limit}&search=${search}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
                     }
-                });
-
-
+                );
+                
+                console.log("API DATA:", response.data.data);
+                
                 setStudents(response.data.data.students);
 
+setTotalPages(
+    response.data.data.totalPages
+);
 
+setTotalStudents(
+    response.data.data.totalStudents
+);
+
+setActiveStudents(
+    response.data.data.students.length
+);
+            
             } catch (error) {
-
+            
                 console.log(error);
-
+            
             }
 
+                
         };
 
 
         fetchStudents();
 
-    }, []);
-
-
+    }, [search, currentPage, limit]);
 
     return (
 
@@ -107,31 +129,30 @@ function Dashboard() {
             <div className="stats-container">
 
 
-    <div className="stat-card">
+<div className="stat-card">
 
-        <h3>
-            👨‍🎓 Total Students
-        </h3>
+    <h3>
+        👨‍🎓 Total Students
+    </h3>
 
-        <h1>
-            {students.length}
-        </h1>
+    <h1>
+        {totalStudents}
+    </h1>
 
-    </div>
+</div>
 
 
+<div className="stat-card">
 
-    <div className="stat-card">
+    <h3>
+        📚 Active Students
+    </h3>
 
-        <h3>
-            📚 CollegeAPI
-        </h3>
+    <h1>
+        {activeStudents}
+    </h1>
 
-        <h1>
-            Active
-        </h1>
-
-    </div>
+</div>
 
 
 </div>
@@ -152,7 +173,33 @@ function Dashboard() {
 <button onClick={() => navigate("/add-student")}>
     + Add Student
 </button>
+<div className="search-container">
 
+    <input
+        type="text"
+        placeholder="Search by Name..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+    />
+
+</div>
+<label>
+    Show:
+    <select
+        value={limit}
+        onChange={(e) => {
+            setLimit(Number(e.target.value));
+            setCurrentPage(1);
+        }}
+    >
+        <option value={5}>5</option>
+        <option value={10}>10</option>
+        <option value={25}>25</option>
+        <option value={50}>50</option>
+        <option value={100}>100</option>
+    </select>
+</label>
+      
                 <table>
 
                     <thead>
@@ -275,6 +322,27 @@ function Dashboard() {
 
 
                 </table>
+                <div className="pagination">
+
+    <button
+        onClick={() => setCurrentPage(currentPage - 1)}
+        disabled={currentPage === 1}
+    >
+        ◀ Previous
+    </button>
+
+    <span>
+        Page {currentPage} of {totalPages}
+    </span>
+
+    <button
+        onClick={() => setCurrentPage(currentPage + 1)}
+        disabled={currentPage === totalPages}
+    >
+        Next ▶
+    </button>
+
+</div>
 
             </div>
             {selectedImage && (
