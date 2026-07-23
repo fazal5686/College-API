@@ -1,35 +1,44 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../api/axios";
+import "./AddStudent.css";
 
 
-function AddStudent() {
+function AddStudent(){
 
 
     const navigate = useNavigate();
 
 
-    const [student, setStudent] = useState({
+    const [formData,setFormData] = useState({
 
-        id: "",
-        name: "",
-        gender: "",
-        age: "",
-        class: "",
-        email: "",
-        phone: "",
-        address: ""
-    
+        id:"",
+        name:"",
+        gender:"",
+        age:"",
+        class:"",
+        email:"",
+        phone:"",
+        address:""
+
     });
 
 
+    const [photo,setPhoto] = useState(null);
 
-    const handleChange = (e) => {
+    const [error,setError] = useState("");
 
-        setStudent({
 
-            ...student,
-            [e.target.name]: e.target.value
+
+
+
+    const handleChange = (e)=>{
+
+        setFormData({
+
+            ...formData,
+
+            [e.target.name]:e.target.value
 
         });
 
@@ -37,158 +46,464 @@ function AddStudent() {
 
 
 
-    const handleSubmit = async (e) => {
+
+
+
+    const handleSubmit = async(e)=>{
+
 
         e.preventDefault();
 
 
-        try {
+        try{
 
-            const token = localStorage.getItem("token");
-            console.log("Sending student data:", student);
+
+            const token =
+            localStorage.getItem("token");
+
+
+
+            const data = new FormData();
+
+
+            Object.keys(formData).forEach((key)=>{
+
+                data.append(
+                    key,
+                    formData[key]
+                );
+
+            });
+
+
+
+            if(photo){
+
+                data.append(
+                    "photo",
+                    photo
+                );
+
+            }
+
+
+
 
             await API.post(
+
                 "/students",
-                student,
+
+                data,
+
                 {
-                    headers: {
-                        Authorization: `Bearer ${token}`
+                    headers:{
+                        Authorization:
+                        `Bearer ${token}`,
+
+                        "Content-Type":
+                        "multipart/form-data"
                     }
                 }
+
             );
 
 
-            alert("Student Added Successfully");
+
+            alert(
+                "Student added successfully"
+            );
 
 
             navigate("/dashboard");
 
 
-        } catch(error) {
+
+        }
+        catch(error){
+
 
             console.log(error);
 
-            alert(
+
+            setError(
+
                 error.response?.data?.message ||
+
                 "Failed to add student"
+
             );
 
+
         }
+
 
     };
 
 
 
-    return (
-
-        <div>
-
-            <h1>Add New Student</h1>
 
 
-            <form onSubmit={handleSubmit}>
-            <input
-    name="id"
-    type="number"
-    placeholder="Student ID"
-    value={student.id}
-    onChange={handleChange}
+
+
+    return(
+
+
+<div className="add-page">
+
+
+
+<div className="add-card">
+
+
+
+<h1>
+Add New Student
+</h1>
+
+
+<p className="subtitle">
+CollegeAPI Student Registration
+</p>
+
+
+
+
+
+<form onSubmit={handleSubmit}>
+
+
+
+
+<div className="form-grid">
+
+
+
+<div className="form-group">
+
+<label>
+Student ID
+</label>
+
+<input
+
+name="id"
+
+value={formData.id}
+
+onChange={handleChange}
+
+placeholder="Enter ID"
+
 />
 
-<br /><br />
+</div>
 
-            <select
-    name="gender"
-    value={student.gender}
-    onChange={handleChange}
+
+
+
+
+<div className="form-group">
+
+<label>
+Name
+</label>
+
+<input
+
+name="name"
+
+value={formData.name}
+
+onChange={handleChange}
+
+placeholder="Enter name"
+
+/>
+
+</div>
+
+
+
+
+
+<div className="form-group">
+
+<label>
+Gender
+</label>
+
+
+<select
+
+name="gender"
+
+value={formData.gender}
+
+onChange={handleChange}
+
 >
 
-    <option value="">
-        Select Gender
-    </option>
+<option value="">
+Select Gender
+</option>
 
-    <option value="Male">
-        Male
-    </option>
 
-    <option value="Female">
-        Female
-    </option>
+<option value="Male">
+Male
+</option>
+
+
+<option value="Female">
+Female
+</option>
+
 
 </select>
 
-<br/><br/>
+
+</div>
+
+
+
+
+
+<div className="form-group">
+
+<label>
+Age
+</label>
+
+<input
+
+type="number"
+
+name="age"
+
+value={formData.age}
+
+onChange={handleChange}
+
+placeholder="Age"
+
+/>
+
+</div>
+
+
+
+
+
+
+<div className="form-group">
+
+<label>
+Class
+</label>
+
+<input
+
+name="class"
+
+value={formData.class}
+
+onChange={handleChange}
+
+placeholder="Class"
+
+/>
+
+</div>
+
+
+
+
+
+
+<div className="form-group">
+
+<label>
+Email
+</label>
+
+<input
+
+type="email"
+
+name="email"
+
+value={formData.email}
+
+onChange={handleChange}
+
+placeholder="Email"
+
+/>
+
+</div>
+
+
+
+
+
+
+<div className="form-group">
+
+<label>
+Phone
+</label>
+
+<input
+
+name="phone"
+
+value={formData.phone}
+
+onChange={handleChange}
+
+placeholder="Phone"
+
+/>
+
+</div>
+
+
+
+
+
+
+
+<div className="form-group">
+
+<label>
+Photo
+</label>
 
 
 <input
-    name="name"
-    placeholder="Student Name"
-    value={student.name}
-    onChange={handleChange}
+
+type="file"
+
+accept="image/*"
+
+onChange={(e)=>
+
+setPhoto(e.target.files[0])
+
+}
+
 />
 
-<br/><br/>
 
-<input
-    name="age"
-    placeholder="Age"
-    value={student.age}
-    onChange={handleChange}
+</div>
+
+
+
+
+
+</div>
+
+
+
+
+
+<div className="form-group address">
+
+
+<label>
+Address
+</label>
+
+
+<textarea
+
+name="address"
+
+value={formData.address}
+
+onChange={handleChange}
+
+placeholder="Enter address"
+
 />
 
-<br/><br/>
+
+</div>
 
 
-<input
-    name="class"
-    placeholder="Class"
-    value={student.class}
-    onChange={handleChange}
-/>
-
-<br/><br/>
 
 
-<input
-    name="email"
-    placeholder="Email"
-    value={student.email}
-    onChange={handleChange}
-/>
-
-<br/><br/>
 
 
-<input
-    name="phone"
-    placeholder="Phone (11 digits)"
-    value={student.phone}
-    onChange={handleChange}
-/>
 
-<br/><br/>
+{
+error &&
 
+<p className="form-error">
 
-<input
-    name="address"
-    placeholder="Address"
-    value={student.address}
-    onChange={handleChange}
-/>
-                <br/><br/>
+{error}
+
+</p>
+
+}
 
 
-                <button type="submit">
-                    Add Student
-                </button>
 
 
-            </form>
+
+<div className="form-buttons">
 
 
-        </div>
+<button
+
+type="submit"
+
+className="save-btn"
+
+>
+
+Save Student
+
+</button>
+
+
+
+
+
+<button
+
+type="button"
+
+className="cancel-btn"
+
+onClick={()=>navigate("/dashboard")}
+
+>
+
+Cancel
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+</form>
+
+
+
+</div>
+
+
+
+</div>
+
 
     );
+
 
 }
 
