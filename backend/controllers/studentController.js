@@ -1,5 +1,7 @@
 const Student = require("../models/Student");
 const asyncHandler = require("../utils/asyncHandler");
+const fs = require("fs");
+const path = require("path");
 
 
 // GET all students
@@ -166,11 +168,65 @@ console.log("FILE:", req.file);
 // UPDATE student
 const updateStudent = asyncHandler(async (req, res) => {
 
-    if (req.file) {
 
-        req.body.photo = req.file.path;
+    const oldStudent = await Student.findById(req.params.id);
+
+
+    if (!oldStudent) {
+
+        return res.status(404).json({
+
+            success:false,
+
+            message:"Student not found"
+
+        });
 
     }
+
+
+
+    // If new image uploaded
+    if(req.file){
+
+
+        // Delete old image
+        if(oldStudent.photo){
+
+
+            const oldImagePath = path.join(
+                __dirname,
+                "..",
+                oldStudent.photo.replace(/\\/g, "/")
+            );
+
+            fs.unlink(oldImagePath, (err)=>{
+
+                if(err){
+
+                    console.log(
+                        "Old image delete error:",
+                        err.message
+                    );
+
+                }
+
+            });
+
+
+        }
+
+
+
+        // Save new image path
+        req.body.photo = req.file.path;
+
+
+    }
+
+
+
+
 
     const student = await Student.findByIdAndUpdate(
 
@@ -179,65 +235,97 @@ const updateStudent = asyncHandler(async (req, res) => {
         req.body,
 
         {
-            new: true
+            new:true
         }
 
     );
 
-    if (!student) {
 
-        return res.status(404).json({
 
-            success: false,
-
-            message: "Student not found"
-
-        });
-
-    }
 
     res.status(200).json({
 
-        success: true,
+        success:true,
 
-        message: "Student updated successfully",
+        message:"Student updated successfully",
 
-        data: student
+        data:student
 
     });
 
-});
 
+});
 
 // DELETE student
 const deleteStudent = asyncHandler(async (req, res) => {
 
-    const student = await Student.findByIdAndDelete(req.params.id);
 
-    if (!student) {
+    const student = await Student.findById(req.params.id);
+
+
+
+    if(!student){
 
         return res.status(404).json({
 
-            success: false,
+            success:false,
 
-            message: "Student not found"
+            message:"Student not found"
 
         });
 
     }
 
+
+
+    // Delete image from folder
+    if(student.photo){
+
+
+        const imagePath = path.join(
+            __dirname,
+            "..",
+            student.photo.replace(/\\/g, "/")
+        );
+
+        fs.unlink(imagePath,(err)=>{
+
+
+            if(err){
+
+                console.log(
+                    "Image delete error:",
+                    err.message
+                );
+
+            }
+
+
+        });
+
+
+    }
+
+
+
+
+    await Student.findByIdAndDelete(req.params.id);
+
+
+
     res.status(200).json({
 
-        success: true,
+        success:true,
 
-        message: "Student deleted successfully",
+        message:"Student deleted successfully",
 
-        data: student
+        data:student
 
     });
 
-});
 
+
+});
 
 module.exports = {
 

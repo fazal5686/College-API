@@ -33,6 +33,7 @@ router.post(
 router.put(
     "/:id",
     authorize("admin"),
+    upload.single("photo"),
     studentValidationRules,
     validateStudent,
     updateStudent

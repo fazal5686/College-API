@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../api/axios";
 import "./AddStudent.css";
-
+import toast from "react-hot-toast";
 
 function AddStudent(){
 
@@ -24,7 +24,17 @@ function AddStudent(){
     });
 
 
-    const [photo,setPhoto] = useState(null);
+    const [photo, setPhoto] = useState(null);
+const [preview, setPreview] = useState(null);
+    {
+        formData.photo && !photo &&
+        
+        <img
+        src={`http://localhost:5000/${formData.photo.replace(/\\/g,"/")}`}
+        width="100"
+        />
+        
+        }
 
     const [error,setError] = useState("");
 
@@ -109,41 +119,28 @@ function AddStudent(){
 
 
 
-            alert(
-                "Student added successfully"
-            );
-
+            toast.success("Student added successfully");
 
             navigate("/dashboard");
 
-
-
         }
-        catch(error){
+        catch (error) {
 
-
-            console.log(error);
-
-
-            setError(
-
+            console.log("FULL ERROR:", error.response?.data);
+        
+            const message =
                 error.response?.data?.message ||
-
-                "Failed to add student"
-
-            );
-
-
+                error.response?.data?.errors?.[0]?.msg ||
+                "Failed to add student";
+        
+            setError(message);
+        
+            toast.error(message);
+        
         }
 
 
     };
-
-
-
-
-
-
 
     return(
 
@@ -366,12 +363,6 @@ placeholder="Phone"
 
 </div>
 
-
-
-
-
-
-
 <div className="form-group">
 
 <label>
@@ -385,14 +376,31 @@ type="file"
 
 accept="image/*"
 
-onChange={(e)=>
+onChange={(e)=>{
 
-setPhoto(e.target.files[0])
-
-}
-
+    const file = e.target.files[0];
+    
+    setPhoto(file);
+    
+    setPreview(URL.createObjectURL(file));
+    
+    }}
 />
 
+{
+preview &&
+
+<img
+src={preview}
+width="100"
+height="100"
+style={{
+borderRadius:"10px",
+objectFit:"cover"
+}}
+/>
+
+}
 
 </div>
 

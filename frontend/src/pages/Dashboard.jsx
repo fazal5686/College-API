@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import API from "../api/axios";
 import "./Dashboard.css";
 import { useNavigate } from "react-router-dom";
-
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 function Dashboard() {
 
@@ -36,13 +37,26 @@ function Dashboard() {
     const handleDelete = async (id) => {
 
 
-        const confirmDelete = window.confirm(
-            "Are you sure you want to delete this student?"
-        );
+        const result = await Swal.fire({
 
-
-        if (!confirmDelete) return;
-
+            title: "Are you sure?",
+        
+            text: "This student record will be deleted permanently!",
+        
+            icon: "warning",
+        
+            showCancelButton: true,
+        
+            confirmButtonColor: "#dc2626",
+        
+            cancelButtonColor: "#6b7280",
+        
+            confirmButtonText: "Yes, delete it!"
+        
+        });
+        
+        
+        if (!result.isConfirmed) return;
 
 
         try {
@@ -67,21 +81,19 @@ function Dashboard() {
             );
 
 
-            alert("Student deleted successfully");
-
+            toast.success("Student deleted successfully");
 
         }
-        catch(error){
+        catch (error) {
 
             console.log(error);
-
-            alert(
+        
+            toast.error(
                 error.response?.data?.message ||
                 "Delete failed"
             );
-
+        
         }
-
     };
 
 
@@ -385,11 +397,10 @@ setCurrentPage(1);
 
 <tbody>
 
-
 {
+students && students.length > 0 ? (
 
-students?.map((student)=>(
-
+students.map((student)=>(
 
 <tr key={student._id}>
 
@@ -409,112 +420,85 @@ students?.map((student)=>(
 <td>{student.phone}</td>
 
 
-
 <td>
-
-
 {
-
-student.photo ?
-
+student.photo ? (
 
 <img
-
-src={`http://localhost:5001/${student.photo}`}
-
+src={`http://localhost:5000/${student.photo.replace(/\\/g,"/")}`}
 alt={student.name}
-
-className="student-photo"
-
-
-onClick={()=>
-
-setSelectedImage(
-
-`http://localhost:5001/${student.photo}`
-
-)
-
-}
-
-
+width="60"
+height="60"
+style={{
+borderRadius:"50%",
+objectFit:"cover"
+}}
 />
 
-
-:
+) : (
 
 "No Photo"
 
+)
 
 }
-
-
-
 </td>
-
-
-
 
 
 <td>
 
-
 <button
-
 className="edit-btn"
-
 onClick={()=>
-
-navigate(
-`/edit-student/${student._id}`
-)
-
+navigate(`/edit-student/${student._id}`)
 }
-
 >
-
 ✏️ Edit
-
 </button>
-
-
-
 
 
 <button
-
 className="delete-btn"
-
 onClick={()=>
-
 handleDelete(student._id)
-
 }
-
 >
-
 🗑 Delete
-
 </button>
-
 
 
 </td>
-
 
 
 </tr>
 
-
 ))
 
 
+) : (
+
+<tr>
+
+<td 
+colSpan="9"
+style={{
+textAlign:"center",
+padding:"20px",
+fontWeight:"bold"
+}}
+>
+
+No students found
+
+</td>
+
+</tr>
+
+)
+
 }
 
-
-
 </tbody>
-
 
 
 </table>

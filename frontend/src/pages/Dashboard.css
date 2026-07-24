@@ -295,46 +295,51 @@
 /* Table */
 
 
-table {
+/* ===========================
+   Professional Table
+=========================== */
 
-    width:100%;
-
-    border-collapse:collapse;
-
-    overflow:hidden;
-
+.card {
+    overflow-x: auto;
 }
 
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 20px;
+}
 
+thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
 
 th {
-
-    background:#2563eb;
-
-    color:white;
-
-    padding:15px;
-
-    text-align:left;
-
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+    padding: 15px;
+    font-size: 15px;
+    text-align: left;
+    letter-spacing: .5px;
 }
-
-
 
 td {
-
-    padding:14px;
-
-    border-bottom:1px solid #eee;
-
+    padding: 14px;
+    border-bottom: 1px solid #e5e7eb;
+    vertical-align: middle;
 }
 
+tbody tr:nth-child(even) {
+    background: #f8fafc;
+}
 
-
-tr:hover {
-
-    background:#eff6ff;
-
+tbody tr:hover {
+    background: #dbeafe;
+    transition: .3s;
 }
 
 

@@ -28,9 +28,8 @@ const upload = multer({
     storage: storage,
 
     limits: {
-        fileSize: 2 * 1024 * 1024
+        fileSize: 10 * 1024 * 1024 // 10 MB
     },
-
 
     fileFilter: function(req, file, cb) {
 
@@ -39,7 +38,6 @@ const upload = multer({
             "image/png",
             "image/jpg"
         ];
-
 
         if (allowedTypes.includes(file.mimetype)) {
 
